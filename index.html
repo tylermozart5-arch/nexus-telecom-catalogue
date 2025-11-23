@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Télécom - Catalogue</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <!-- LOGO TEXTUEL AVEC EFFET NÉON (STYLES DANS style.css) -->
+            <span class="logo-text">Nexus</span>
+        </div>
+        <h1 class="titre">Catalogue de Téléphones Mobiles</h1>
+        
+        <!-- NOUVELLE NAVIGATION PAR CATÉGORIE (OS) -->
+        <nav class="main-nav">
+            <button class="nav-button active" data-view="all">Tout le Catalogue</button>
+            <button class="nav-button" data-view="iphone">iPhones</button>
+            <button class="nav-button" data-view="android">Android</button>
+        </nav>
+        
+        <!-- BARRE DE RECHERCHE -->
+        <input type="text" id="searchBar" placeholder="Rechercher un modèle...">
+    </header>
+
+    <!-- CONTENEUR PRINCIPAL DU CATALOGUE -->
+    <div id="catalogue-main" class="catalogue">
+        <!-- Toutes les cartes (filtrées par JS) seront générées ici -->
+    </div>
+
+    <!-- La modale pour le prix a été retirée, car le prix est affiché directement. -->
+
+    <script src="script.js"></script>
+</body>
+</html>

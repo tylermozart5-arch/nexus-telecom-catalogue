@@ -1,0 +1,253 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #020202; /* Fond très sombre */
+    color: white;
+}
+
+/* Classe pour masquer les conteneurs (non utilisée dans cette version, mais conservée) */
+.hidden {
+    display: none !important;
+}
+
+/* ======================================================= */
+/* --- NOUVEAU STYLE DU LOGO NÉON --- */
+/* ======================================================= */
+.logo-container {
+    text-align: center;
+    padding: 30px 0 10px 0; /* Plus de marge au-dessus */
+}
+
+.logo-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 2.8em; /* Grande taille */
+    font-weight: 700;
+    letter-spacing: 2px;
+    
+    /* Effet néon bleu-cyan */
+    color: #fff;
+    text-shadow: 
+        0 0 10px #00ffff, /* Ombre intérieure brillante */
+        0 0 20px #00ffff, /* Ombre extérieure moyenne */
+        0 0 40px rgba(0, 255, 255, 0.7); /* Halo large et diffus */
+    
+    transition: all 0.5s ease;
+    cursor: default;
+    display: inline-block;
+}
+
+.logo-text:hover {
+    /* Un petit effet de pulsation au survol */
+    text-shadow: 
+        0 0 15px #fff,
+        0 0 30px #00ffff,
+        0 0 60px rgba(0, 255, 255, 1);
+    transform: scale(1.02);
+}
+
+.titre {
+    text-align: center;
+    margin-top: 10px;
+    color: #00ffff; /* Couleur vive pour le titre */
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+/* ======================================================= */
+/* --- NAVIGATION ET BARRE DE RECHERCHE --- */
+/* ======================================================= */
+.main-nav {
+    text-align: center;
+    margin: 20px 0 10px 0;
+}
+
+.nav-button {
+    background-color: #1a1a1a;
+    color: #00ffff;
+    border: 1px solid #00ffff;
+    padding: 10px 20px;
+    margin: 0 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    min-width: 150px;
+}
+
+.nav-button:hover:not(.active) {
+    background-color: #00ffff1a;
+}
+
+.nav-button.active {
+    background-color: #00ffff;
+    color: #020202;
+    font-weight: bold;
+    box-shadow: 0 0 10px #00ffff;
+}
+
+#searchBar {
+    display: block;
+    margin: 25px auto; 
+    padding: 12px 15px;
+    width: 80%; 
+    max-width: 500px; 
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    background-color: #222; 
+    color: #eee; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
+    outline: none;
+    transition: 0.3s;
+}
+
+#searchBar:focus {
+    transform: scale(1.02); 
+    box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.5); 
+}
+
+/* ======================================================= */
+/* --- MISE EN PAGE DU CATALOGUE (GRILLE RESPONSIVE) --- */
+/* ======================================================= */
+.catalogue {
+    display: grid; 
+    /* Par défaut sur desktop/tablette, on utilise auto-fit */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px; 
+    padding: 20px 5%; 
+    max-width: 1200px;
+    margin: 40px auto; 
+}
+
+.no-results {
+    grid-column: 1 / -1; 
+    text-align: center;
+    color: #aaa;
+    font-size: 1.2em;
+    padding: 50px;
+}
+
+/* ======================================================= */
+/* --- STYLE DES CARTES TÉLÉPHONE ET BADGE --- */
+/* ======================================================= */
+.phone-card {
+    position: relative; 
+    background-color: #1a1a1a; 
+    padding: 15px;
+    border: 1px solid #333; 
+    border-radius: 18px; 
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: white;
+    min-height: 350px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Badge de condition Remplacé par le Badge OS */
+.os-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 0.8em;
+    font-weight: bold;
+    z-index: 5;
+    color: white;
+}
+
+.os-badge.iphone {
+    background-color: #666; /* Gris Apple */
+}
+
+.os-badge.android {
+    background-color: #3DDC84; /* Vert Android */
+    color: #000;
+}
+
+/* Règle pour UNIFORMISER la taille des images dans les cartes */
+.phone-card img {
+    max-width: 130px; 
+    max-height: 180px;
+    display: block; 
+    margin: 10px auto;
+    border-radius: 14px;
+    object-fit: contain; 
+    flex-grow: 1;
+}
+
+.phone-card:hover {
+    transform: translateY(-5px) scale(1.05); 
+    box-shadow: 0 15px 30px rgba(0, 255, 255, 0.15),
+                0 0 10px rgba(0, 255, 255, 0.5);
+    z-index: 10;
+}
+
+.phone-name {
+    margin: 5px 0;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+/* NOUVEAU STYLE POUR LE PRIX DIRECT */
+.phone-price {
+    font-size: 1.3em; 
+    margin-top: 15px;
+    padding-top: 5px;
+    border-top: 1px dashed #333; /* Séparateur léger */
+    color: #00ffff; /* Le libellé "Prix:" est en bleu néon */
+    font-weight: normal;
+    align-self: flex-end; 
+    width: 100%;
+}
+
+.phone-price strong {
+    font-weight: 800;
+    color: #FFFFFF; /* Le montant du prix est en BLANC pur pour un contraste maximal */
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Ajout d'une petite ombre pour le relief */
+}
+
+
+/* ======================================================= */
+/* --- MEDIA QUERIES (ADAPTATION MOBILE) --- */
+/* ======================================================= */
+
+@media (max-width: 600px) {
+    /* Le catalogue passe à une seule colonne pour les petits écrans */
+    .catalogue {
+        grid-template-columns: 1fr; /* Une seule colonne de largeur maximale */
+        padding: 10px 5%; 
+        gap: 20px;
+    }
+
+    /* Les boutons de navigation peuvent s'empiler ou s'étirer */
+    .main-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Espace entre les boutons empilés */
+        padding: 0 10%;
+    }
+
+    .nav-button {
+        width: 100%; /* Les boutons prennent toute la largeur */
+        margin: 0; /* Suppression des marges latérales */
+    }
+    
+    /* La barre de recherche peut prendre plus de place */
+    #searchBar {
+        width: 90%; 
+        margin: 20px auto; 
+        font-size: 1em;
+    }
+
+    .logo-text {
+        font-size: 2.2em; /* Taille légèrement réduite pour le logo */
+    }
+
+    .titre {
+        font-size: 1.5em;
+    }
+}
