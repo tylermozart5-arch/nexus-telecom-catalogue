@@ -3,35 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Télécom - Catalogue</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <div class="logo-container">
-            <!-- LOGO TEXTUEL AVEC EFFET NÉON (STYLES DANS style.css) -->
-            <span class="logo-text">Nexus</span>
-        </div>
-        <h1 class="titre">Catalogue de Téléphones Mobiles</h1>
-        
-        <!-- NOUVELLE NAVIGATION PAR CATÉGORIE (OS) -->
-        <nav class="main-nav">
-            <button class="nav-button active" data-view="all">Tout le Catalogue</button>
-            <button class="nav-button" data-view="iphone">iPhones</button>
-            <button class="nav-button" data-view="android">Android</button>
-        </nav>
-        
-        <!-- BARRE DE RECHERCHE -->
-        <input type="text" id="searchBar" placeholder="Rechercher un modèle...">
-    </header>
+    <title>Nexus Télécom - Cyber Catalogue</title>
+    <!-- Chargement de Tailwind CSS pour un style rapide et réactif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* Configuration de la police par défaut (Cyberpunk) */
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background-color: #0d0c1d; /* Fond très sombre */
+            color: #00ffff; /* Couleur du texte par défaut (Cyan Néo) */
+            line-height: 1.6;
+        }
 
-    <!-- CONTENEUR PRINCIPAL DU CATALOGUE -->
-    <div id="catalogue-main" class="catalogue">
-        <!-- Toutes les cartes (filtrées par JS) seront générées ici -->
+        /* Style Général du Conteneur */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            min-height: 100vh;
+            background-color: #1a192d; /* Conteneur légèrement plus clair */
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); /* Ombre de lueur cyber */
+        }
+
+        /* En-tête */
+        header {
+            border-bottom: 2px solid #ff00ff; /* Ligne de séparation Magenta Néo */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .logo {
+            font-family: 'Major Mono Display', monospace;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+            color: #fff;
+        }
+
+        /* Navigation et Filtres */
+        .nav-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #00ffff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 4px; /* Ajout de coins arrondis */
+        }
+        /* Les classes active/hover sont maintenant gérées par Tailwind et JS dans script.js */
+        
+        /* Barre de Recherche et Tri */
+        #searchBar, #sortSelector {
+            background-color: #0d0c1d;
+            border: 1px solid #ff00ff;
+            color: #fff;
+            padding: 0.5rem;
+            font-family: 'Share Tech Mono', monospace;
+            border-radius: 4px; /* Ajout de coins arrondis */
+        }
+        
+        /* Bannière Défilement */
+        .banner {
+            background-color: rgba(255, 0, 255, 0.1);
+            border: 1px dashed #ff00ff;
+            padding: 0.5rem;
+            overflow: hidden;
+            white-space: nowrap;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border-radius: 4px;
+        }
+        #banner-text {
+            color: #ff00ff; /* Magenta */
+            transition: opacity 0.3s;
+        }
+
+        /* Catalogue */
+        #catalogue-main {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .phone-card {
+            background-color: #0d0c1d;
+            border: 1px solid #00ffff55;
+            padding: 1rem;
+            text-align: center;
+            /* Les transitions/hover sont gérées par Tailwind dans script.js */
+            position: relative;
+            border-radius: 8px; /* Coins arrondis pour les cartes */
+        }
+        .phone-image {
+            width: 100%;
+            height: 180px;
+            object-fit: contain;
+            margin: 0.5rem 0;
+            border: 1px solid #ff00ff;
+            padding: 0.5rem; /* Ajout de padding autour de l'image */
+        }
+        .phone-name {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .phone-price strong {
+            color: #00ffff;
+        }
+        .os-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 3px;
+        }
+        .os-badge.android {
+            background-color: #3dff3d; /* Vert */
+            color: #1a192d;
+        }
+        .os-badge.iphone {
+            background-color: #cccccc;
+            color: #1a192d;
+        }
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #ff00ff;
+            padding: 2rem;
+            border: 1px dashed #ff00ff;
+        }
+        
+        /* Vue Détails - Améliorations CSS */
+        #detail-view {
+            display: none; /* Caché par défaut */
+            padding: 2rem;
+            background-color: #0d0c1d;
+            border: 2px solid #ff00ff;
+            border-radius: 8px; /* Ajout de coins arrondis */
+        }
+        .detail-header {
+            border-bottom: 1px dotted #00ffff;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-content {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .detail-info {
+            flex-grow: 1;
+        }
+        #detail-image {
+            width: 250px;
+            height: 350px;
+            object-fit: contain;
+            border: 3px solid #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+        #detail-price-display strong {
+            font-size: 1.5rem;
+            color: #3dff3d; /* Vert prix */
+            text-shadow: 0 0 5px #3dff3d;
+        }
+        .spec-item {
+            border-bottom: 1px dashed #2a294d;
+            padding: 0.5rem 0;
+        }
+        .spec-item span {
+            color: #fff;
+            font-weight: bold;
+        }
+        .back-button {
+            background-color: #ff00ff;
+            color: #1a192d;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px #ff00ff;
+            transition: background-color 0.3s;
+            border-radius: 4px; /* Ajout de coins arrondis */
+        }
+        .back-button:hover {
+            background-color: #00ffff;
+            box-shadow: 0 0 15px #00ffff;
+        }
+
+        /* Formulaires (Styles minimaux conservés pour la recherche/tri) */
+        .form-input {
+            width: 100%;
+            background-color: #0d0c1d; 
+            border: 1px solid #ff00ff; 
+            color: #fff;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+        
+        /* Style pour la description */
+        .description-box {
+            background-color: rgba(255, 0, 255, 0.1);
+            border: 1px dashed #ff00ff;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 4px;
+        }
+        .description-box h4 {
+            color: #ff00ff;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 5px #ff00ff;
+        }
+        
+    </style>
+</head>
+<body class="p-0 m-0">
+    <div class="container">
+        <!-- EN-TÊTE ET LOGO -->
+        <header class="flex justify-between items-center">
+            <h1 class="logo">NEXUS TÉLÉCOM</h1>
+            <p class="text-xs text-right text-gray-400">CONNEXION // CYBER-MARCHÉ 0.9.1</p>
+        </header>
+
+        <!-- BANNIÈRE DE DÉFILEMENT (INFO STATUT) -->
+        <div class="banner">
+            <span id="banner-text">Initialisation du Protocole...</span>
+        </div>
+
+        <!-- VUE DU CATALOGUE -->
+        <section id="catalogue-view">
+            <!-- BARRE DE NAVIGATION (CATÉGORIES) -->
+            <nav class="flex justify-center space-x-4 mb-4">
+                <button class="nav-button active" data-view="all">TOUS LES TERMINAUX</button>
+                <button class="nav-button" data-view="iphone">SÉRIE iPhone</button>
+                <button class="nav-button" data-view="android">SÉRIE Android</button>
+            </nav>
+
+            <!-- FILTRES ET RECHERCHE -->
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0 sm:space-x-4">
+                <input type="text" id="searchBar" placeholder="RECHERCHE PAR NOM DE MODÈLE..." class="form-input flex-grow">
+                <select id="sortSelector" class="form-input w-full sm:w-auto">
+                    <option value="default">TRI: PERTINENCE</option>
+                    <option value="price-asc">TRI: PRIX CROISSANT</option>
+                    <option value="price-desc">TRI: PRIX DÉCROISSANT</option>
+                </select>
+            </div>
+
+            <!-- CONTENEUR DES CARTES DE TÉLÉPHONE -->
+            <div id="catalogue-main">
+                <!-- Les cartes de téléphones seront injectées ici par JavaScript -->
+            </div>
+        </section>
+
+        <!-- VUE DES DÉTAILS DU PRODUIT (APPARITION au clic) -->
+        <section id="detail-view">
+            <div class="detail-header">
+                <button id="backToCatalogue" class="back-button mb-4">← RETOUR AU CYBER-CATALOGUE</button>
+                <h2 id="detail-name" class="text-3xl font-bold text-white">Nom du Produit</h2>
+            </div>
+            
+            <div class="detail-content flex-col md:flex-row">
+                <!-- IMAGE ET INFO PRINCIPALE -->
+                <div class="flex-shrink-0">
+                    <img id="detail-image" src="" alt="Image du téléphone" class="mx-auto">
+                    <p class="text-center mt-4">PRIX AFFICHÉ : <strong id="detail-price-display">[Prix]</strong></p>
+                </div>
+                
+                <!-- SPÉCIFICATIONS ET DESCRIPTION -->
+                <div class="detail-info">
+                    <h3 class="text-xl text-yellow-500 mb-4">Spécifications Terminales [SIMULÉES]</h3>
+                    
+                    <div class="spec-item">Système d'Exploitation : <span id="detail-os"></span></div>
+                    <div class="spec-item">Écran : <span>OLED 6.7" | 120Hz Adaptatif</span></div>
+                    <div class="spec-item">Processeur : <span>Hexa-Core Bio-Chip V3</span></div>
+                    <div class="spec-item">Mémoire/Stockage : <span>12GB RAM / 512GB NVMe</span></div>
+                    <div class="spec-item">Caméra : <span>108MP Cybersense / 4K60FPS</span></div>
+                    <div class="spec-item">Batterie : <span>4800mAh | Charge Warp-Speed 120W</span></div>
+                    <div class="spec-item">Connectivité : <span>5G | Wi-Fi 7 | Bluetooth 5.4</span></div>
+                    
+                    <!-- NOUVELLE BALISE POUR LA DESCRIPTION -->
+                    <div class="description-box">
+                        <h4>// PROTOCOLE DESCRIPTION //</h4>
+                        <p id="detail-description" class="text-gray-300">
+                            <!-- Description injectée par JavaScript -->
+                        </p>
+                    </div>
+
+                    <!-- L'ancienne section d'offre a été définitivement retirée -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Pied de page -->
+        <footer class="mt-8 pt-4 border-t border-gray-700 text-center text-xs text-gray-500">
+            Nexus Télécom - Protocole 2077 V0.9.1 | Tous droits réservés. Accès sécurisé [LEVEL 3].
+        </footer>
     </div>
 
-    <!-- La modale pour le prix a été retirée, car le prix est affiché directement. -->
-
-    <script src="script.js"></script>
+    <!-- Script JavaScript -->
+    <script type="text/javascript" src="script.js"></script>
 </body>
-</html>
