@@ -3,302 +3,665 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Télécom - Cyber Catalogue</title>
-    <!-- Chargement de Tailwind CSS pour un style rapide et réactif -->
+    <title>Nexus Télécom | Cyber-Boutique</title>
+    <!-- Chargement de Tailwind CSS pour un design moderne et responsive -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- Configuration de la police Inter -->
     <style>
-        /* Configuration de la police par défaut (Cyberpunk) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         body {
-            font-family: 'Share Tech Mono', monospace;
-            background-color: #0d0c1d; /* Fond très sombre */
-            color: #00ffff; /* Couleur du texte par défaut (Cyan Néo) */
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* Fond sombre de type 'dark mode' */
+            color: #ffffff; /* Texte blanc par défaut */
+            overflow-x: hidden; /* Empêche le défilement horizontal */
         }
-
-        /* Style Général du Conteneur */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-            min-height: 100vh;
-            background-color: #1a192d; /* Conteneur légèrement plus clair */
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); /* Ombre de lueur cyber */
+        /* Styles spécifiques pour l'aspect "cyberpunk" */
+        .neon-border {
+            box-shadow: 0 0 5px #ff007f, 0 0 10px #ff007f;
         }
-
-        /* En-tête */
-        header {
-            border-bottom: 2px solid #ff00ff; /* Ligne de séparation Magenta Néo */
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .logo {
-            font-family: 'Major Mono Display', monospace;
-            font-size: 2.5rem;
-            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
-            color: #fff;
-        }
-
-        /* Navigation et Filtres */
-        .nav-button {
-            padding: 0.5rem 1rem;
-            border: 1px solid #00ffff;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-transform: uppercase;
-            border-radius: 4px; /* Ajout de coins arrondis */
-        }
-        /* Les classes active/hover sont maintenant gérées par Tailwind et JS dans script.js */
-        
-        /* Barre de Recherche et Tri */
-        #searchBar, #sortSelector {
-            background-color: #0d0c1d;
-            border: 1px solid #ff00ff;
-            color: #fff;
-            padding: 0.5rem;
-            font-family: 'Share Tech Mono', monospace;
-            border-radius: 4px; /* Ajout de coins arrondis */
-        }
-        
-        /* Bannière Défilement */
-        .banner {
-            background-color: rgba(255, 0, 255, 0.1);
-            border: 1px dashed #ff00ff;
-            padding: 0.5rem;
-            overflow: hidden;
-            white-space: nowrap;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            border-radius: 4px;
-        }
-        #banner-text {
-            color: #ff00ff; /* Magenta */
-            transition: opacity 0.3s;
-        }
-
-        /* Catalogue */
-        #catalogue-main {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
+        .header-bg {
+            background-color: #161b22;
         }
         .phone-card {
-            background-color: #0d0c1d;
-            border: 1px solid #00ffff55;
-            padding: 1rem;
-            text-align: center;
-            /* Les transitions/hover sont gérées par Tailwind dans script.js */
             position: relative;
-            border-radius: 8px; /* Coins arrondis pour les cartes */
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .phone-image {
-            width: 100%;
-            height: 180px;
-            object-fit: contain;
-            margin: 0.5rem 0;
-            border: 1px solid #ff00ff;
-            padding: 0.5rem; /* Ajout de padding autour de l'image */
-        }
-        .phone-name {
-            font-size: 1.1rem;
-            color: #fff;
-            margin-bottom: 0.5rem;
-        }
-        .phone-price strong {
-            color: #00ffff;
-        }
-        .os-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            padding: 2px 8px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            border-radius: 3px;
-        }
-        .os-badge.android {
-            background-color: #3dff3d; /* Vert */
-            color: #1a192d;
-        }
-        .os-badge.iphone {
-            background-color: #cccccc;
-            color: #1a192d;
-        }
-        .no-results {
-            grid-column: 1 / -1;
-            text-align: center;
-            color: #ff00ff;
-            padding: 2rem;
-            border: 1px dashed #ff00ff;
-        }
-        
-        /* Vue Détails - Améliorations CSS */
-        #detail-view {
-            display: none; /* Caché par défaut */
-            padding: 2rem;
-            background-color: #0d0c1d;
-            border: 2px solid #ff00ff;
-            border-radius: 8px; /* Ajout de coins arrondis */
-        }
-        .detail-header {
-            border-bottom: 1px dotted #00ffff;
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .detail-content {
-            display: flex;
-            gap: 2rem;
-        }
-        
-        .detail-info {
-            flex-grow: 1;
-        }
-        #detail-image {
-            width: 250px;
-            height: 350px;
-            object-fit: contain;
-            border: 3px solid #00ffff;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-        }
-        #detail-price-display strong {
-            font-size: 1.5rem;
-            color: #3dff3d; /* Vert prix */
-            text-shadow: 0 0 5px #3dff3d;
-        }
-        .spec-item {
-            border-bottom: 1px dashed #2a294d;
-            padding: 0.5rem 0;
-        }
-        .spec-item span {
-            color: #fff;
-            font-weight: bold;
+        .phone-card:hover {
+            border-color: #ff007f; /* Effet de survol néon */
         }
         .back-button {
-            background-color: #ff00ff;
-            color: #1a192d;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            box-shadow: 0 0 15px #ff00ff;
-            transition: background-color 0.3s;
-            border-radius: 4px; /* Ajout de coins arrondis */
+            transition: all 0.3s ease;
         }
         .back-button:hover {
-            background-color: #00ffff;
-            box-shadow: 0 0 15px #00ffff;
+            transform: translateX(-5px);
+            background-color: #ff007f;
         }
-
-        /* Formulaires (Styles minimaux conservés pour la recherche/tri) */
-        .form-input {
-            width: 100%;
-            background-color: #0d0c1d; 
-            border: 1px solid #ff00ff; 
-            color: #fff;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border-radius: 4px;
+        /* Style pour l'animation de la bannière */
+        #top-banner {
+            transition: opacity 0.3s ease-in-out;
         }
         
-        /* Style pour la description */
-        .description-box {
-            background-color: rgba(255, 0, 255, 0.1);
-            border: 1px dashed #ff00ff;
-            padding: 1rem;
-            margin-top: 1.5rem;
-            border-radius: 4px;
+        /* Styles du Canevas d'Arrière-plan Animé (Kyubi Fox) */
+        #backgroundCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Place le canevas derrière tout le contenu */
         }
-        .description-box h4 {
-            color: #ff00ff;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 5px #ff00ff;
-        }
-        
     </style>
 </head>
-<body class="p-0 m-0">
-    <div class="container">
-        <!-- EN-TÊTE ET LOGO -->
-        <header class="flex justify-between items-center">
-            <h1 class="logo">NEXUS TÉLÉCOM</h1>
-            <p class="text-xs text-right text-gray-400">CONNEXION // CYBER-MARCHÉ 0.9.1</p>
+<body class="min-h-screen">
+
+    <!-- Canevas pour l'animation d'arrière-plan (Renard Démon) -->
+    <canvas id="backgroundCanvas"></canvas>
+
+    <!-- Conteneur Principal pour le Centrage -->
+    <div class="max-w-7xl mx-auto p-4 md:p-8 relative z-10"> <!-- z-10 assure que le contenu est au-dessus du canevas -->
+
+        <!-- En-tête Global -->
+        <header class="header-bg rounded-xl p-4 mb-6 neon-border bg-opacity-95">
+            <h1 class="text-4xl font-extrabold text-center tracking-widest text-white mb-2">
+                <span class="text-red-500">NEXUS</span> TÉLÉCOM
+            </h1>
+            <!-- Bannière d'information défilante / cyberpunk style -->
+            <div id="top-banner" class="text-center text-sm font-mono text-gray-300 bg-gray-900 p-2 rounded-lg border border-red-500">
+                <span id="banner-text" class="tracking-wide"></span>
+            </div>
         </header>
+        
+        <!-- ======================================================= -->
+        <!-- VUE DU CATALOGUE (Catalogue View) -->
+        <!-- ======================================================= -->
+        <div id="catalogue-view">
 
-        <!-- BANNIÈRE DE DÉFILEMENT (INFO STATUT) -->
-        <div class="banner">
-            <span id="banner-text">Initialisation du Protocole...</span>
-        </div>
-
-        <!-- VUE DU CATALOGUE -->
-        <section id="catalogue-view">
-            <!-- BARRE DE NAVIGATION (CATÉGORIES) -->
-            <nav class="flex justify-center space-x-4 mb-4">
-                <button class="nav-button active" data-view="all">TOUS LES TERMINAUX</button>
-                <button class="nav-button" data-view="iphone">SÉRIE iPhone</button>
-                <button class="nav-button" data-view="android">SÉRIE Android</button>
-            </nav>
-
-            <!-- FILTRES ET RECHERCHE -->
-            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0 sm:space-x-4">
-                <input type="text" id="searchBar" placeholder="RECHERCHE PAR NOM DE MODÈLE..." class="form-input flex-grow">
-                <select id="sortSelector" class="form-input w-full sm:w-auto">
-                    <option value="default">TRI: PERTINENCE</option>
-                    <option value="price-asc">TRI: PRIX CROISSANT</option>
-                    <option value="price-desc">TRI: PRIX DÉCROISSANT</option>
+            <!-- Barres de Contrôle (Filtre, Recherche, Tri) -->
+            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-6">
+                
+                <!-- Recherche -->
+                <input type="text" id="searchBar" placeholder="Rechercher par nom ou description..."
+                       class="flex-1 p-3 rounded-lg bg-gray-900 border border-gray-700 text-white focus:border-red-500 focus:ring focus:ring-red-500/50 transition bg-opacity-90">
+                
+                <!-- Tri -->
+                <select id="sortSelector" 
+                        class="p-3 rounded-lg bg-gray-900 border border-gray-700 text-white focus:border-red-500 focus:ring focus:ring-red-500/50 bg-opacity-90">
+                    <option value="default">Trier par Pertinence</option>
+                    <option value="price-asc">Prix Croissant (FCFA)</option>
+                    <option value="price-desc">Prix Décroissant (FCFA)</option>
                 </select>
             </div>
 
-            <!-- CONTENEUR DES CARTES DE TÉLÉPHONE -->
-            <div id="catalogue-main">
+            <!-- Navigation Catégories (OS Filter) -->
+            <nav class="flex justify-center space-x-2 md:space-x-4 mb-8">
+                <button data-view="all" class="nav-button p-3 rounded-full text-sm font-semibold transition duration-200">
+                    Tous les Modèles
+                </button>
+                <button data-view="iphone" class="nav-button p-3 rounded-full text-sm font-semibold transition duration-200">
+                    iOS (iPhone)
+                </button>
+                <button data-view="android" class="nav-button p-3 rounded-full text-sm font-semibold transition duration-200">
+                    Android OS
+                </button>
+            </nav>
+
+            <!-- Grille du Catalogue -->
+            <div id="catalogue-main" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                 <!-- Les cartes de téléphones seront injectées ici par JavaScript -->
             </div>
-        </section>
 
-        <!-- VUE DES DÉTAILS DU PRODUIT (APPARITION au clic) -->
-        <section id="detail-view">
-            <div class="detail-header">
-                <button id="backToCatalogue" class="back-button mb-4">← RETOUR AU CYBER-CATALOGUE</button>
-                <h2 id="detail-name" class="text-3xl font-bold text-white">Nom du Produit</h2>
-            </div>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- VUE DÉTAIL DU PRODUIT (Detail View) -->
+        <!-- ======================================================= -->
+        <div id="detail-view" class="hidden">
             
-            <div class="detail-content flex-col md:flex-row">
-                <!-- IMAGE ET INFO PRINCIPALE -->
-                <div class="flex-shrink-0">
-                    <img id="detail-image" src="" alt="Image du téléphone" class="mx-auto">
-                    <p class="text-center mt-4">PRIX AFFICHÉ : <strong id="detail-price-display">[Prix]</strong></p>
-                </div>
+            <button id="backToCatalogue" class="back-button bg-gray-700 text-white px-4 py-2 rounded-full mb-6 flex items-center shadow-lg">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Retour au Catalogue
+            </button>
+
+            <div class="bg-gray-800 rounded-xl p-6 lg:p-10 shadow-2xl flex flex-col lg:flex-row gap-8 lg:gap-12 bg-opacity-95">
                 
-                <!-- SPÉCIFICATIONS ET DESCRIPTION -->
-                <div class="detail-info">
-                    <h3 class="text-xl text-yellow-500 mb-4">Spécifications Terminales [SIMULÉES]</h3>
+                <!-- Image du Produit -->
+                <div class="lg:w-1/3 flex justify-center items-center p-4 bg-gray-900 rounded-lg neon-border">
+                    <img id="detail-image" src="" alt="Image du Téléphone" class="w-2/3 h-auto max-h-96 object-contain">
+                </div>
+
+                <!-- Informations et Achat -->
+                <div class="lg:w-2/3">
+                    <h2 id="detail-name" class="text-4xl font-extrabold text-red-500 mb-2">Nom du Produit</h2>
                     
-                    <div class="spec-item">Système d'Exploitation : <span id="detail-os"></span></div>
-                    <div class="spec-item">Écran : <span>OLED 6.7" | 120Hz Adaptatif</span></div>
-                    <div class="spec-item">Processeur : <span>Hexa-Core Bio-Chip V3</span></div>
-                    <div class="spec-item">Mémoire/Stockage : <span>12GB RAM / 512GB NVMe</span></div>
-                    <div class="spec-item">Caméra : <span>108MP Cybersense / 4K60FPS</span></div>
-                    <div class="spec-item">Batterie : <span>4800mAh | Charge Warp-Speed 120W</span></div>
-                    <div class="spec-item">Connectivité : <span>5G | Wi-Fi 7 | Bluetooth 5.4</span></div>
-                    
-                    <!-- NOUVELLE BALISE POUR LA DESCRIPTION -->
-                    <div class="description-box">
-                        <h4>// PROTOCOLE DESCRIPTION //</h4>
-                        <p id="detail-description" class="text-gray-300">
-                            <!-- Description injectée par JavaScript -->
-                        </p>
+                    <div class="flex items-center space-x-6 mb-4">
+                        <span class="text-xl text-gray-400">OS: <strong id="detail-os" class="text-white font-bold">OS</strong></span>
+                        <span class="text-xl text-gray-400">Prix: <strong id="detail-price-display" class="text-3xl font-extrabold text-green-400">0 FCFA</strong></span>
                     </div>
 
-                    <!-- L'ancienne section d'offre a été définitivement retirée -->
+                    <p id="detail-description" class="text-gray-300 mb-8 leading-relaxed">
+                        Description détaillée du produit.
+                    </p>
+
+                    <!-- BOUTON D'ACHAT WHATSAPP -->
+                    <a id="whatsapp-buy-button" href="#" target="_blank"
+                       class="w-full lg:w-3/4 flex items-center justify-center p-4 bg-green-600 text-white text-xl font-bold rounded-full transition duration-300 hover:bg-green-700 neon-border-green shadow-xl">
+                       <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                           <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.35 4.96l-1.4 5.14 5.23-1.37c1.47.8 3.1 1.25 4.73 1.25 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91zm0 18.02c-1.46 0-2.88-.39-4.13-1.13l-.3-.18-3.09.81.83-3.04-.2-.32c-.79-1.28-1.21-2.76-1.21-4.3 0-4.57 3.71-8.28 8.28-8.28s8.28 3.71 8.28 8.28-3.71 8.28-8.28 8.28zm4.56-6.85c-.25-.12-.87-.43-.99-.48-.12-.05-.2-.07-.29.07-.1.17-.37.48-.46.58-.1.1-.19.12-.35.05s-.63-.23-1.19-.73c-.44-.39-.75-.87-1-1.23-.25-.36-.03-.38.18-.58.19-.19.2-.36.3-.54.1-.19.05-.36-.02-.51-.07-.12-.29-.73-.4-.99-.12-.25-.26-.21-.37-.21h-.29c-.19 0-.49.07-.75.35-.25.28-.96.94-.96 2.31 0 1.37.99 2.68 1.13 2.87.14.19 1.95 2.97 4.8 4.29 2.85 1.32 2.85 2.19 3.01 2.31.14.12.3.17.65.17.35 0 2.22-.76 2.53-1.63.31-.87.31-1.63.22-1.78-.08-.14-.29-.22-.61-.39z"/>
+                       </svg>
+                       ACHETER VIA WHATSAPP
+                    </a>
+
                 </div>
+
             </div>
-        </section>
+        </div>
         
-        <!-- Pied de page -->
-        <footer class="mt-8 pt-4 border-t border-gray-700 text-center text-xs text-gray-500">
-            Nexus Télécom - Protocole 2077 V0.9.1 | Tous droits réservés. Accès sécurisé [LEVEL 3].
-        </footer>
     </div>
 
-    <!-- Script JavaScript -->
-    <script type="text/javascript" src="script.js"></script>
+    <!-- Le script sera chargé ici et gère toute la logique de navigation et d'affichage -->
+    <script>
+        // ===================================================================
+        // 1. TABLEAUX DE DONNÉES CATÉGORISÉS PAR OS
+        // ===================================================================
+
+        const androidPhones = [
+            // Téléphones Android utilisant des URLs directes
+            { id: 'S24', name: "Samsung Galaxy S24 Ultra", price: "620 000 FCFA", image: "https://placehold.co/130x180/003366/FFFFFF?text=S24+Ultra", os: 'android', description: "Le fleuron d'Android. Écran Dynamic AMOLED, Stylet S Pen intégré, et un système de caméra professionnel pour des clichés parfaits en toutes conditions. Performance brute et autonomie impressionnante." },
+            { id: 'PXL8', name: "Google Pixel 8 Pro", price: "450 000 FCFA", image: "https://placehold.co/130x180/FF3300/FFFFFF?text=Pixel+8+Pro", os: 'android', description: "L'intelligence artificielle au service de la photo et de la performance. Puce Tensor G3, expérience Android pure, et les mises à jour en avant-première. Le smartphone des puristes." },
+            { id: 'X13T', name: "Xiaomi 13T Pro", price: "290 000 FCFA", image: "https://placehold.co/130x180/8B0000/FFFFFF?text=Xiaomi+13T", os: 'android', description: "Un champion de la vitesse. Écran 144Hz AMOLED, charge rapide ultra-puissante. Conçu pour le jeu et le multitâche intensif, sans compromis sur l'autonomie." },
+            { id: 'TSP10', name: "Tecno Spark 10", price: "95 000 FCFA", image: "https://placehold.co/130x180/008080/FFFFFF?text=Tecno+10", os: 'android', description: "Le meilleur rapport qualité-prix. Idéal pour un usage quotidien, les réseaux sociaux, et une bonne autonomie. Un choix fiable pour le marché d'entrée de gamme." },
+            { id: 'OPOX6', name: "Oppo Find X6", price: "380 00FA", image: "https://placehold.co/130x180/4682B4/FFFFFF?text=Oppo+X6", os: 'android', description: "L'élégance et l'innovation. Un design raffiné, des performances de haut vol, et des fonctionnalités de photographie uniques, notamment son mode portrait avancé." },
+            { id: 'MT40', name: "Motorola Edge 40", price: "250 000 FCFA", image: "https://placehold.co/130x180/DAA520/FFFFFF?text=Moto+40", os: 'android', description: "Style minimaliste et robustesse. Un écran P-OLED incurvé fluide, une résistance à l'eau IP68, et une interface logicielle quasi-stock. La simplicité alliée à la performance." },
+            { id: 'OP12', name: "OnePlus 12", price: "420 000 FCFA", image: "https://placehold.co/130x180/3CB371/FFFFFF?text=OnePlus+12", os: 'android', description: "Le retour du 'Flagship Killer'. Performances exceptionnelles grâce au dernier processeur Snapdragon, charge filaire et sans fil très rapide, et un écran d'une clarté inégalée." },
+        ];
+
+        const iphonePhones = [
+            // Téléphones iPhone utilisant des URLs directes
+            { id: 'I15P', name: "iPhone 15 Pro Max", price: "850 000 FCFA", image: "https://placehold.co/130x180/1a1a1a/FFFFFF?text=15+Pro+Max", os: 'iphone', description: "Le summum de la technologie mobile. Châssis en titane, puce A17 Bionic pour des performances dignes d'une console, et un appareil photo qui redéfinit la prise de vue professionnelle sur smartphone." },
+            { id: 'I14', name: "iPhone 14", price: "480 000 FCFA", image: "https://placehold.co/130x180/4F4F4F/FFFFFF?text=iPhone+14", os: 'iphone', description: "Fiabilité et polyvalence. Idéal pour l'écosystème Apple, avec une excellente qualité vidéo et photo, et une durabilité éprouvée. Un classique intemporel." },
+            { id: 'I13', name: "iPhone 13", price: "350 000 FCFA", image: "https://placehold.co/130x180/696969/FFFFFF?text=iPhone+13", os: 'iphone', description: "Puissance abordable. Puce rapide, excellent écran OLED, et une mise à niveau significative par rapport aux générations précédentes. Le meilleur point d'entrée vers l'iPhone." },
+            { id: 'ISE22', name: "iPhone SE (2022)", price: "220 000 FCFA", image: "https://placehold.co/130x180/808080/FFFFFF?text=iPhone+SE", os: 'iphone', description: "La puissance dans un format compact. Équipé de la puce A15, il offre des performances de haut niveau dans un design historique avec le bouton Home." },
+            { id: 'I15', name: "iPhone 15", price: "650 000 FCFA", image: "https://placehold.co/130x180/2F4F4F/FFFFFF?text=iPhone+15", os: 'iphone', description: "Design rafraîchi et Dynamic Island. Une excellente caméra principale, et l'introduction de l'USB-C, le rendant le plus polyvalent des modèles standard à ce jour." },
+        ];
+
+        // Combine tous les téléphones pour la vue 'all'
+        const allPhonesData = [...androidPhones, ...iphonePhones];
+
+
+        // ===================================================================
+        // 2. ÉTAT GLOBAL ET CONSTANTES
+        // ===================================================================
+
+        let currentView = 'all'; 
+
+        const bannerMessages = [
+            "[INFO_SECURE] Les meilleures offres du Cyber-Marché sont ici.",
+            "// PROTOCOLE ACTIF // Jusqu'à 40% de réduction sur les modèles 5G.",
+            "// FLASH NEWS // Le nouveau S25 arrive. Préparez vos crédits.",
+            "| N E X U S | La connexion ultime, garantie sans *GLITCH* majeur.",
+            "|| PRIX CHOC || Découvrez l'iPhone 15 Pro à prix imbattable.",
+        ];
+        let currentBannerIndex = 0;
+
+        // --- DÉTAIL CLÉ WHATSAPP ---
+        // Numéro WhatsApp configuré : +241 62 63 66 00 (Formaté sans signes)
+        const WHATSAPP_NUMBER = '24162636600'; 
+
+
+        // ===================================================================
+        // 3. LOGIQUE DE TRI ET DE FILTRAGE
+        // ===================================================================
+
+        // Fonction utilitaire pour convertir le prix (chaîne de caractères) en nombre
+        function getPriceValue(priceString) {
+            const numericPart = priceString.replace(/\s+/g, '').replace('FCFA', '');
+            return parseFloat(numericPart) || 0; 
+        }
+
+        // Fonction principale pour trier les données
+        function sortPhones(data, sortType) {
+            if (sortType === 'default') {
+                let originalSource = allPhonesData;
+                if (currentView === 'iphone') {
+                    originalSource = iphonePhones;
+                } else if (currentView === 'android') {
+                    originalSource = androidPhones;
+                } 
+                
+                const sorted = [...originalSource].filter(phone => data.some(d => d.id === phone.id));
+                return sorted;
+            }
+
+            const sortedData = [...data]; 
+
+            if (sortType === 'price-asc' || sortType === 'price-desc') {
+                sortedData.sort((a, b) => {
+                    const priceA = getPriceValue(a.price);
+                    const priceB = getPriceValue(b.price);
+
+                    if (sortType === 'price-asc') {
+                        return priceA - priceB; 
+                    } else {
+                        return priceB - priceA; 
+                    }
+                });
+            }
+
+            return sortedData;
+        }
+
+
+        // Gère la logique de recherche et de filtre sur la vue ACTIVE
+        function filterPhones() {
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            const sortType = document.getElementById('sortSelector').value; 
+            
+            let sourceData;
+
+            if (currentView === 'iphone') {
+                sourceData = iphonePhones;
+            } else if (currentView === 'android') {
+                sourceData = androidPhones;
+            } else {
+                sourceData = allPhonesData;
+            }
+
+            const filteredData = sourceData.filter(phone => {
+                return phone.name.toLowerCase().includes(searchTerm) || 
+                       (phone.description && phone.description.toLowerCase().includes(searchTerm)); 
+            });
+            
+            const finalData = sortPhones(filteredData, sortType);
+
+            renderPhones(finalData);
+        }
+
+
+        // ===================================================================
+        // 4. FONCTION DE CONSTRUCTION DU CATALOGUE (RENDER)
+        // ===================================================================
+
+        // Rend les cartes HTML pour un ensemble de données donné dans le conteneur principal.
+        function renderPhones(data) {
+            const catalogue = document.getElementById('catalogue-main');
+            
+            if (!catalogue) {
+                console.error("Erreur: Le conteneur #catalogue-main est introuvable.");
+                return;
+            }
+
+            catalogue.innerHTML = ''; 
+
+            data.forEach(phone => {
+                const card = document.createElement('div');
+                // Utilisation des classes Tailwind pour le style de la carte
+                card.className = 'phone-card bg-gray-800 rounded-lg shadow-lg p-4 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-2xl flex flex-col items-center bg-opacity-90';
+                
+                card.setAttribute('data-id', phone.id);
+                // Rend la carte cliquable pour afficher les détails
+                card.addEventListener('click', () => showProductDetails(phone.id));
+
+                const badgeText = phone.os === 'iphone' ? 'iPhone' : 'Android';
+                // Ajustement des badges pour un look cohérent avec le thème sombre
+                const badgeClass = phone.os === 'iphone' ? 'bg-gray-600 text-white' : 'bg-red-600 text-white';
+                
+                card.innerHTML = `
+                    <span class="absolute top-2 left-2 px-2 py-1 text-xs font-semibold rounded ${badgeClass} shadow-md">${badgeText}</span>
+                    <img src="${phone.image}" alt="${phone.name}" class="phone-image w-3/4 h-48 object-contain mb-3" onerror="this.onerror=null; this.src='https://placehold.co/130x180/222222/FFFFFF?text=Erreur%20Image'">
+                    <p class="phone-name text-lg font-bold text-white text-center mb-1">${phone.name}</p>
+                    <p class="phone-price text-sm text-gray-300">Prix: <strong class="text-red-500">${phone.price}</strong></p>
+                `;
+                
+                catalogue.appendChild(card);
+            });
+            
+            if (data.length === 0) {
+                catalogue.innerHTML = '<p class="text-center text-gray-400 mt-10 text-xl no-results">Aucun résultat trouvé. Essayez une autre recherche, Agent.</p>';
+            }
+        }
+
+        // Gère l'animation de la bannière
+        function updateBanner() {
+            const bannerElement = document.getElementById('banner-text');
+            if (bannerElement) {
+                bannerElement.style.opacity = '0'; 
+                
+                setTimeout(() => {
+                    bannerElement.textContent = bannerMessages[currentBannerIndex];
+                    currentBannerIndex = (currentBannerIndex + 1) % bannerMessages.length;
+                    
+                    bannerElement.style.opacity = '1'; 
+                }, 300); 
+            }
+        }
+
+
+        // ===================================================================
+        // 5. LOGIQUE DE GESTION DES VUES (CATALOGUE / DÉTAILS)
+        // ===================================================================
+
+        /**
+         * Bascule l'affichage entre la vue catalogue et la vue détails.
+         * @param {string} showViewId - 'catalogue' ou 'details'
+         */
+        function toggleMainView(showViewId) {
+            const catalogueView = document.getElementById('catalogue-view');
+            const detailView = document.getElementById('detail-view');
+
+            if (showViewId === 'catalogue') {
+                catalogueView.style.display = 'block';
+                detailView.style.display = 'none';
+                // Assure que le catalogue est re-rendu dans la vue par défaut
+                changeView(currentView);
+            } else if (showViewId === 'details') {
+                catalogueView.style.display = 'none';
+                detailView.style.display = 'block';
+            }
+        }
+
+        /**
+         * Affiche les détails d'un produit spécifique et configure le lien WhatsApp.
+         * @param {string} productId - L'ID unique du téléphone.
+         */
+        function showProductDetails(productId) {
+            const product = allPhonesData.find(p => p.id === productId);
+
+            if (!product) {
+                console.error(`Erreur critique: Produit ID ${productId} non trouvé.`);
+                return;
+            }
+
+            // Remplir les éléments de la vue de détails
+            document.getElementById('detail-name').textContent = product.name;
+            document.getElementById('detail-image').src = product.image;
+            document.getElementById('detail-image').alt = product.name;
+            document.getElementById('detail-price-display').textContent = product.price; 
+            document.getElementById('detail-os').textContent = product.os.charAt(0).toUpperCase() + product.os.slice(1);
+            document.getElementById('detail-description').textContent = product.description || "Description non disponible.";
+            
+            // --- LOGIQUE WHATSAPP ---
+            const encodedMessage = encodeURIComponent(`Bonjour, je suis intéressé par l'achat du téléphone ${product.name} (ID: ${product.id}) affiché au prix de ${product.price}. Est-ce toujours disponible ?`);
+            
+            // Construction de l'URL WhatsApp
+            const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+            const button = document.getElementById('whatsapp-buy-button');
+            
+            button.href = whatsappLink;
+            button.target = '_blank'; 
+            button.disabled = false;
+            
+            // Affichage par défaut (avec l'icône et le texte)
+            button.innerHTML = `
+                <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.35 4.96l-1.4 5.14 5.23-1.37c1.47.8 3.1 1.25 4.73 1.25 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91zm0 18.02c-1.46 0-2.88-.39-4.13-1.13l-.3-.18-3.09.81.83-3.04-.2-.32c-.79-1.28-1.21-2.76-1.21-4.3 0-4.57 3.71-8.28 8.28-8.28s8.28 3.71 8.28 8.28-3.71 8.28-8.28 8.28zm4.56-6.85c-.25-.12-.87-.43-.99-.48-.12-.05-.2-.07-.29.07-.1.17-.37.48-.46.58-.1.1-.19.12-.35.05s-.63-.23-1.19-.73c-.44-.39-.75-.87-1-1.23-.25-.36-.03-.38.18-.58.19-.19.2-.36.3-.54.1-.19.05-.36-.02-.51-.07-.12-.29-.73-.4-.99-.12-.25-.26-.21-.37-.21h-.29c-.19 0-.49.07-.75.35-.25.28-.96.94-.96 2.31 0 1.37.99 2.68 1.13 2.87.14.19 1.95 2.97 4.8 4.29 2.85 1.32 2.85 2.19 3.01 2.31.14.12.3.17.65.17.35 0 2.22-.76 2.53-1.63.31-.87.31-1.63.22-1.78-.08-.14-.29-.22-.61-.39z"/>
+                </svg>
+                ACHETER VIA WHATSAPP
+            `;
+            
+            // Basculer vers la vue détails
+            toggleMainView('details');
+        }
+
+
+        // Fonction pour basculer entre les vues de catégorie (dans la vue catalogue)
+        function changeView(view) {
+            currentView = view;
+            
+            // Met à jour la classe 'active' de la navigation
+            document.querySelectorAll('.nav-button[data-view]').forEach(button => {
+                button.classList.remove('bg-red-600', 'text-white', 'hover:bg-red-700', 'bg-gray-700', 'hover:bg-gray-600');
+                if (button.getAttribute('data-view') === view) {
+                     // Couleur active : Rouge/Magenta (thème cyberpunk)
+                     button.classList.add('bg-red-600', 'text-white', 'hover:bg-red-700');
+                } else {
+                     // Couleur inactive : Gris foncé
+                    button.classList.add('bg-gray-700', 'text-white', 'hover:bg-gray-600');
+                }
+            });
+
+            // Réinitialise la barre de recherche et le tri à 'Pertinence' (default)
+            const searchBar = document.getElementById('searchBar');
+            const sortSelector = document.getElementById('sortSelector');
+            if (searchBar) searchBar.value = '';
+            if (sortSelector) sortSelector.value = 'default';
+
+            // Applique le filtre et le tri par défaut
+            filterPhones();
+        }
+
+
+        // ===================================================================
+        // 6. LOGIQUE D'ANIMATION DE FOND (RENARD DÉMON & PARTICULES)
+        // La logique d'animation est isolée ici pour garantir qu'elle ne bloque pas l'UI.
+        // ===================================================================
+
+        // Variables globales du canevas
+        let canvas, ctx, particles, kyubi, orb; 
+        
+        try {
+            canvas = document.getElementById('backgroundCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // Classe pour les particules de fond (Code Rain/Noise)
+            class Particle {
+                constructor(x, y) {
+                    this.x = x || Math.random() * canvas.width;
+                    this.y = y || Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedY = Math.random() * 1.5 + 0.5;
+                    this.color = `rgba(0, 255, 150, ${Math.random() * 0.5 + 0.1})`; // Vert/Cyan NÉON
+                }
+                update() {
+                    this.y += this.speedY;
+                    if (this.y > canvas.height) {
+                        this.y = 0; // Réinitialise en haut
+                        this.x = Math.random() * canvas.width;
+                    }
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(this.x, this.y, this.size, this.size * 2);
+                }
+            }
+            
+            // Représente le Renard Démon (Polygon Rougeoyant)
+            class Kyubi {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.size = 20;
+                    this.angle = 0;
+                    this.speed = 1.5;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.angle);
+                    
+                    // Ombre Néon Rouge
+                    ctx.shadowBlur = 20;
+                    ctx.shadowColor = 'rgba(255, 0, 127, 0.8)'; // Rouge/Magenta Vif
+
+                    // Dessin du corps principal (forme de triangle)
+                    ctx.beginPath();
+                    ctx.moveTo(this.size, 0); // Pointe avant
+                    ctx.lineTo(-this.size / 2, -this.size * 0.8); // Coin arrière gauche
+                    ctx.lineTo(-this.size / 2, this.size * 0.8); // Coin arrière droit
+                    ctx.closePath();
+                    ctx.fillStyle = 'rgba(255, 0, 127, 0.5)';
+                    ctx.fill();
+                    
+                    ctx.restore();
+                }
+                
+                update() {
+                    if (!orb) return; // Sécurité
+
+                    const dx = orb.x - this.x;
+                    const dy = orb.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance > 50) { 
+                        this.x += dx / distance * this.speed;
+                        this.y += dy / distance * this.speed;
+                    }
+                    
+                    this.angle = Math.atan2(dy, dx);
+                    
+                    this.x = Math.max(0, Math.min(canvas.width, this.x));
+                    this.y = Math.max(0, Math.min(canvas.height, this.y));
+                }
+            }
+
+            // Représente la Balle (Cercle Lumineux)
+            class Orb {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.radius = 8;
+                    this.targetX = x;
+                    this.targetY = y;
+                    this.speed = 0.02; // Vitesse de transition vers la nouvelle cible
+                    this.setNewTarget();
+                }
+                
+                // Cherche une nouvelle position aléatoire
+                setNewTarget() {
+                    // S'assure que la cible n'est pas trop près des bords
+                    this.targetX = Math.random() * (canvas.width * 0.8) + (canvas.width * 0.1);
+                    this.targetY = Math.random() * (canvas.height * 0.8) + (canvas.height * 0.1);
+                }
+
+                draw() {
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = 'rgba(0, 255, 255, 0.8)'; // Cyan NÉON
+                    
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0, 255, 255, 0.6)';
+                    ctx.fill();
+                }
+
+                update() {
+                    // Lissage du mouvement vers la cible
+                    this.x += (this.targetX - this.x) * this.speed;
+                    this.y += (this.targetY - this.y) * this.speed;
+                    
+                    // Si l'Orb est proche de sa cible, trouve une nouvelle cible
+                    const dx = this.targetX - this.x;
+                    const dy = this.targetY - this.y;
+                    if (Math.sqrt(dx * dx + dy * dy) < 10) {
+                        // Utilise un délai pour que le mouvement ne soit pas constant
+                        if (Math.random() < 0.01) { 
+                            this.setNewTarget();
+                        }
+                    }
+                }
+            }
+            
+            // Initialisation du canevas et des entités
+            function initCanvas() {
+                // Assure que le contexte est prêt
+                if (!ctx) return; 
+
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                
+                // Crée les particules
+                particles = [];
+                for (let i = 0; i < 150; i++) { // 150 particules de "code rain"
+                    particles.push(new Particle());
+                }
+                
+                // Crée le Kyubi et l'Orb si elles n'existent pas déjà
+                if (!orb) orb = new Orb(canvas.width / 2 + 100, canvas.height / 2);
+                if (!kyubi) kyubi = new Kyubi(canvas.width / 2 - 100, canvas.height / 2);
+                
+                // Met à jour les positions initiales pour éviter les bugs si la fenêtre est redimensionnée
+                orb.setNewTarget();
+            }
+            
+            // Boucle d'animation principale
+            function animateCanvas() {
+                // S'assurer que le Kyubi et l'Orb sont définis avant de les dessiner/mettre à jour
+                if (!kyubi || !orb) {
+                    requestAnimationFrame(animateCanvas);
+                    return; 
+                }
+
+                // Effet de traînée et de transparence du fond (donne le look cyberpunk)
+                ctx.fillStyle = 'rgba(13, 17, 23, 0.1)'; 
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Réinitialise l'ombre pour les particules
+                ctx.shadowBlur = 0;
+
+                // 1. Mise à jour et dessin des particules
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                // 2. Mise à jour et dessin du Kyubi et de l'Orb (avec ombres néon)
+                orb.update();
+                kyubi.update();
+
+                orb.draw();
+                kyubi.draw();
+
+                // Boucle de rafraîchissement
+                requestAnimationFrame(animateCanvas);
+            }
+
+            // Gère le redimensionnement de la fenêtre
+            window.addEventListener('resize', initCanvas);
+            
+            // Démarrage de l'animation
+            initCanvas(); 
+            animateCanvas();
+
+        } catch (e) {
+            console.error("Erreur critique dans l'animation de fond (Kyubi/Canvas). L'application principale est conservée.", e);
+            // Laisse l'erreur se loguer, mais le reste du code de l'application s'exécutera normalement.
+        }
+
+
+        // ===================================================================
+        // 7. INITIALISATION PRINCIPALE DE L'APPLICATION
+        // ===================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Initialisation de la vue par défaut (Catalogue)
+            toggleMainView('catalogue');
+            
+            // 2. Initialisation de la bannière dynamique et son intervalle
+            updateBanner();
+            setInterval(updateBanner, 5000); 
+            
+            // 3. Écouteurs pour la barre de recherche et le sélecteur de tri
+            const searchBar = document.getElementById('searchBar');
+            const sortSelector = document.getElementById('sortSelector');
+            if (searchBar) searchBar.addEventListener('keyup', filterPhones);
+            if (sortSelector) sortSelector.addEventListener('change', filterPhones);
+
+            // 4. Écouteurs pour les boutons de navigation (Catégories)
+            document.querySelectorAll('.nav-button[data-view]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const view = button.getAttribute('data-view');
+                    changeView(view);
+                });
+            });
+
+            // 5. Écouteur pour le bouton de retour au catalogue
+            document.getElementById('backToCatalogue')?.addEventListener('click', () => {
+                toggleMainView('catalogue');
+            });
+            
+            // S'assurer que la vue est correctement définie au chargement
+            changeView('all');
+        });
+    </script>
+    
 </body>
+</html>
