@@ -1,60 +1,136 @@
+/* --- ANIMATIONS KEYFRAMES --- */
+
+/* Animation pour simuler le scan d'un écran CRT */
+@keyframes scanline {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+}
+
+/* Animation de l'ombre néon pour la rendre vivante */
+@keyframes neon-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        text-shadow: 
+            0 0 4px #fff,
+            0 0 11px #00ffff,
+            0 0 19px #00ffff,
+            0 0 40px rgba(0, 255, 255, 0.7);
+    }
+    20%, 24%, 55% {        
+        text-shadow: none; /* Effet de micro-coupure */
+    }
+}
+
+/* ======================================================= */
+/* --- STYLE GLOBAL ET FOND ANIMÉ CYBERPUNK --- */
+/* ======================================================= */
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #020202; /* Fond très sombre */
-    color: white;
+    font-family: 'Consolas', monospace, sans-serif; /* Police futuriste */
+    background-color: #020202; /* Fond de secours */
+    color: #00ffff; /* Texte par défaut en couleur néon */
+    overflow-x: hidden;
+    position: relative;
+    
+    /* NOUVEAU : Image de fond Cyberpunk avec effet d'opacité */
+    /* Utilisez une image réelle ou ce placeholder pour l'effet */
+    background-image: url('https://placehold.co/1920x1080/000000/FFFFFF?text=CYBERPUNK+CITYSCAPE'); 
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    
+    /* Animation de grille et de scanlines par dessus l'image */
+    background-image: 
+        linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px), 
+        linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+        url('https://placehold.co/1920x1080/000000/FFFFFF?text=CYBERPUNK+CITYSCAPE');
+    background-size: 50px 50px, 50px 50px, cover;
 }
 
-/* Classe pour masquer les conteneurs (non utilisée dans cette version, mais conservée) */
-.hidden {
-    display: none !important;
+/* Overlay pour l'effet de bruit de fond (Scanline) et assombrissement */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1; /* Placé en dessous des éléments mais au-dessus du background */
+    
+    /* Couche d'assombrissement pour l'image de fond (80% d'opacité) */
+    background: rgba(0, 0, 0, 0.8);
+    
+    /* Création de scanlines animées */
+    background-image: 
+        repeating-linear-gradient(
+            0deg, 
+            rgba(0, 0, 0, 0.2), 
+            rgba(0, 0, 0, 0.5) 1px, 
+            transparent 1px, 
+            transparent 3px
+        );
+    animation: scanline 10s linear infinite; /* Défilement lent des scanlines */
 }
+
 
 /* ======================================================= */
-/* --- NOUVEAU STYLE DU LOGO NÉON --- */
+/* --- LOGO ET TITRE --- */
 /* ======================================================= */
 .logo-container {
     text-align: center;
-    padding: 30px 0 10px 0; /* Plus de marge au-dessus */
+    padding: 40px 0 10px 0; 
 }
 
 .logo-text {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 2.8em; /* Grande taille */
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 3.2em; 
     font-weight: 700;
-    letter-spacing: 2px;
-    
-    /* Effet néon bleu-cyan */
+    letter-spacing: 4px; 
     color: #fff;
-    text-shadow: 
-        0 0 10px #00ffff, /* Ombre intérieure brillante */
-        0 0 20px #00ffff, /* Ombre extérieure moyenne */
-        0 0 40px rgba(0, 255, 255, 0.7); /* Halo large et diffus */
-    
-    transition: all 0.5s ease;
+    animation: neon-flicker 2s infinite alternate; 
     cursor: default;
     display: inline-block;
+    z-index: 10;
 }
 
-.logo-text:hover {
-    /* Un petit effet de pulsation au survol */
-    text-shadow: 
-        0 0 15px #fff,
-        0 0 30px #00ffff,
-        0 0 60px rgba(0, 255, 255, 1);
-    transform: scale(1.02);
+.logo-text i {
+    margin-right: 15px;
 }
 
 .titre {
     text-align: center;
     margin-top: 10px;
-    color: #00ffff; /* Couleur vive pour le titre */
-    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    color: #FF00FF; /* Couleur secondaire : Magenta néon */
+    text-shadow: 0 0 8px rgba(255, 0, 255, 0.6);
+    padding: 0 5%;
 }
 
 /* ======================================================= */
-/* --- NAVIGATION ET BARRE DE RECHERCHE --- */
+/* --- BANNÈRE DYNAMIQUE (DIAPORAMA SIMPLE) --- */
+/* ======================================================= */
+.featured-banner {
+    width: 80%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 15px;
+    background: rgba(0, 255, 255, 0.05); 
+    border: 1px solid #00ffff; 
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    text-align: center;
+    border-radius: 8px;
+}
+
+#banner-text {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 5px #00ffff;
+    transition: opacity 0.3s ease; 
+}
+
+/* ======================================================= */
+/* --- NAVIGATION ET RECHERCHE/TRI --- */
 /* ======================================================= */
 .main-nav {
     text-align: center;
@@ -62,27 +138,31 @@ body {
 }
 
 .nav-button {
-    background-color: #1a1a1a;
+    background-color: #111;
     color: #00ffff;
     border: 1px solid #00ffff;
     padding: 10px 20px;
     margin: 0 8px;
-    border-radius: 8px;
+    border-radius: 4px; 
     cursor: pointer;
     font-size: 1.1em;
-    transition: background-color 0.3s, box-shadow 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
     min-width: 150px;
+    text-transform: uppercase;
 }
 
 .nav-button:hover:not(.active) {
-    background-color: #00ffff1a;
+    background-color: #00ffff;
+    color: #111;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
 }
 
 .nav-button.active {
-    background-color: #00ffff;
+    background-color: #FF00FF; 
     color: #020202;
     font-weight: bold;
-    box-shadow: 0 0 10px #00ffff;
+    border-color: #FF00FF;
+    box-shadow: 0 0 10px #FF00FF;
 }
 
 #searchBar {
@@ -91,114 +171,129 @@ body {
     padding: 12px 15px;
     width: 80%; 
     max-width: 500px; 
-    border-radius: 8px;
-    border: none;
+    border-radius: 0; 
+    border: 2px solid #FF00FF;
     font-size: 16px;
-    background-color: #222; 
-    color: #eee; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
+    background-color: #111; 
+    color: #FF00FF; 
+    box-shadow: 0 4px 15px rgba(255, 0, 255, 0.3); 
     outline: none;
     transition: 0.3s;
 }
 
 #searchBar:focus {
-    transform: scale(1.02); 
-    box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.5); 
+    transform: scale(1.01); 
+    box-shadow: 0 0 0 4px rgba(0, 255, 255, 0.5); 
+    border-color: #00ffff;
+}
+
+.tools-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0px auto 20px auto;
+    text-align: right; 
+    padding-right: 5%;
+}
+
+.sort-label {
+    margin-right: 10px;
+    color: #00ffff;
+}
+
+#sortSelector {
+    padding: 8px 15px;
+    border-radius: 0;
+    border: 1px solid #00ffff;
+    background-color: #111;
+    color: #00ffff;
+    font-size: 1em;
+    cursor: pointer;
+    text-transform: uppercase;
 }
 
 /* ======================================================= */
-/* --- MISE EN PAGE DU CATALOGUE (GRILLE RESPONSIVE) --- */
+/* --- STYLE DES CARTES TÉLÉPHONE (VUE CATALOGUE) --- */
 /* ======================================================= */
 .catalogue {
     display: grid; 
-    /* Par défaut sur desktop/tablette, on utilise auto-fit */
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px; 
-    padding: 20px 5%; 
+    gap: 40px; 
+    padding: 30px 5%; 
     max-width: 1200px;
-    margin: 40px auto; 
+    margin: 0 auto 40px auto; 
 }
 
-.no-results {
-    grid-column: 1 / -1; 
-    text-align: center;
-    color: #aaa;
-    font-size: 1.2em;
-    padding: 50px;
-}
-
-/* ======================================================= */
-/* --- STYLE DES CARTES TÉLÉPHONE ET BADGE --- */
-/* ======================================================= */
 .phone-card {
     position: relative; 
-    background-color: #1a1a1a; 
-    padding: 15px;
-    border: 1px solid #333; 
-    border-radius: 18px; 
+    background-color: rgba(255, 255, 255, 0.05); 
+    padding: 20px;
+    border: 1px solid #FF00FF; 
+    border-radius: 2px; 
     text-align: center;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    color: white;
-    min-height: 350px; 
+    min-height: 380px; 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-/* Badge de condition Remplacé par le Badge OS */
-.os-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 4px 10px;
-    border-radius: 5px;
-    font-size: 0.8em;
-    font-weight: bold;
-    z-index: 5;
-    color: white;
-}
-
-.os-badge.iphone {
-    background-color: #666; /* Gris Apple */
-}
-
-.os-badge.android {
-    background-color: #3DDC84; /* Vert Android */
-    color: #000;
-}
-
-/* Règle pour UNIFORMISER la taille des images dans les cartes */
-.phone-card img {
-    max-width: 130px; 
-    max-height: 180px;
-    display: block; 
-    margin: 10px auto;
-    border-radius: 14px;
-    object-fit: contain; 
-    flex-grow: 1;
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.2); 
 }
 
 .phone-card:hover {
-    transform: translateY(-5px) scale(1.05); 
-    box-shadow: 0 15px 30px rgba(0, 255, 255, 0.15),
-                0 0 10px rgba(0, 255, 255, 0.5);
+    transform: translateY(-8px) scale(1.05); 
+    box-shadow: 0 0 10px #00ffff, 
+                0 0 20px #00ffff,
+                0 0 40px rgba(0, 255, 255, 0.8);
+    border-color: #00ffff;
     z-index: 10;
 }
 
-.phone-name {
-    margin: 5px 0;
-    font-size: 1.1em;
+.os-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 4px 10px;
+    border-radius: 0;
+    font-size: 0.9em;
     font-weight: bold;
+    z-index: 5;
+    color: #020202;
+    text-transform: uppercase;
 }
 
-/* NOUVEAU STYLE POUR LE PRIX DIRECT */
+.os-badge.iphone {
+    background-color: #888;
+}
+
+.os-badge.android {
+    background-color: #3DDC84; 
+}
+
+.phone-card img {
+    max-width: 150px; 
+    max-height: 200px;
+    display: block; 
+    margin: 15px auto;
+    border-radius: 5px;
+    object-fit: contain; 
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    flex-grow: 1;
+}
+
+.phone-name {
+    margin: 10px 0;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 5px #00ffff;
+}
+
 .phone-price {
-    font-size: 1.3em; 
-    margin-top: 15px;
-    padding-top: 5px;
-    border-top: 1px dashed #333; /* Séparateur léger */
-    color: #00ffff; /* Le libellé "Prix:" est en bleu néon */
+    font-size: 1.5em; 
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #FF00FF; 
+    color: #FF00FF; 
     font-weight: normal;
     align-self: flex-end; 
     width: 100%;
@@ -206,48 +301,240 @@ body {
 
 .phone-price strong {
     font-weight: 800;
-    color: #FFFFFF; /* Le montant du prix est en BLANC pur pour un contraste maximal */
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Ajout d'une petite ombre pour le relief */
+    color: #FFFFFF;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); 
+}
+
+.no-results {
+    grid-column: 1 / -1; 
+    text-align: center;
+    color: #aaa;
+    font-size: 1.5em;
+    padding: 50px;
+    text-shadow: 0 0 5px #FF00FF;
+}
+
+/* ======================================================= */
+/* --- STYLE DE LA VUE DÉTAILS DU PRODUIT --- */
+/* ======================================================= */
+#detail-view {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 10px 0;
+    border-bottom: 2px solid #FF00FF;
+}
+
+.detail-logo {
+    font-size: 1.8em;
+    animation: none; /* Désactive le flicker pour le petit logo */
+    text-shadow: 0 0 5px #00ffff;
+}
+
+.neon-button {
+    min-width: 100px;
+    padding: 8px 15px;
+    font-size: 1em;
+}
+
+.product-details-container {
+    background-color: rgba(0, 0, 0, 0.7); /* Plus opaque pour la lisibilité */
+    border: 1px solid #00ffff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+    padding: 30px;
+    border-radius: 5px;
+}
+
+.detail-title {
+    color: #fff;
+    text-shadow: 0 0 10px #FF00FF;
+    border-bottom: 1px dashed #FF00FF;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product-content {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap; 
+}
+
+.product-image-section {
+    flex: 1;
+    min-width: 250px;
+    text-align: center;
+}
+
+.detail-image {
+    max-width: 100%;
+    height: auto;
+    border: 3px solid #00ffff;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.product-info-section {
+    flex: 2;
+    min-width: 300px;
+}
+
+.description-placeholder {
+    margin-bottom: 20px;
+    line-height: 1.6;
+    border-left: 3px solid #FF00FF;
+    padding-left: 15px;
+}
+
+.detail-label {
+    color: #00ffff;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.detail-value {
+    color: #fff;
+}
+
+.offer-title {
+    color: #FF00FF;
+    text-shadow: 0 0 8px rgba(255, 0, 255, 0.8);
+    margin-top: 30px;
+    border-top: 1px solid #00ffff;
+    padding-top: 15px;
+}
+
+.offer-form-style .form-group {
+    margin-bottom: 15px;
+}
+
+.offer-form-style label {
+    display: block;
+    margin-bottom: 5px;
+    color: #00ffff;
+}
+
+.offer-form-style input[type="text"],
+.offer-form-style input[type="number"] {
+    width: 95%;
+    padding: 10px;
+    background-color: #0a0a0a;
+    border: 1px solid #FF00FF;
+    color: #fff;
+    font-size: 1em;
+    border-radius: 0;
+    transition: box-shadow 0.3s;
+}
+
+.offer-form-style input[type="text"]:focus,
+.offer-form-style input[type="number"]:focus {
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
+    outline: none;
+}
+
+.offer-form-style button[type="submit"] {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    font-size: 1.2em;
+    
+    /* Bouton spécifique pour l'achat */
+    background-color: #FF00FF;
+    color: #020202;
+    border-color: #FF00FF;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.7);
+    transition: transform 0.2s;
+}
+
+.offer-form-style button[type="submit"]:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(255, 0, 255, 1);
+}
+
+.offer-response {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #00ffff;
+    background-color: rgba(0, 255, 255, 0.1);
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 2px;
 }
 
 
 /* ======================================================= */
 /* --- MEDIA QUERIES (ADAPTATION MOBILE) --- */
 /* ======================================================= */
-
-@media (max-width: 600px) {
-    /* Le catalogue passe à une seule colonne pour les petits écrans */
-    .catalogue {
-        grid-template-columns: 1fr; /* Une seule colonne de largeur maximale */
-        padding: 10px 5%; 
-        gap: 20px;
+@media (max-width: 768px) {
+    .logo-text {
+        font-size: 2.2em; 
+        letter-spacing: 2px;
     }
-
-    /* Les boutons de navigation peuvent s'empiler ou s'étirer */
+    .titre {
+        font-size: 1.2em;
+    }
+    .featured-banner {
+        width: 90%;
+        margin: 20px auto;
+    }
     .main-nav {
         display: flex;
-        flex-direction: column;
-        gap: 10px; /* Espace entre les boutons empilés */
-        padding: 0 10%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px; 
     }
-
     .nav-button {
-        width: 100%; /* Les boutons prennent toute la largeur */
-        margin: 0; /* Suppression des marges latérales */
+        flex-grow: 1;
+        margin: 0;
+    }
+    .tools-container {
+        text-align: center;
+        padding-right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
     }
     
-    /* La barre de recherche peut prendre plus de place */
-    #searchBar {
-        width: 90%; 
-        margin: 20px auto; 
-        font-size: 1em;
+    .product-content {
+        flex-direction: column;
     }
 
-    .logo-text {
-        font-size: 2.2em; /* Taille légèrement réduite pour le logo */
+    .detail-header {
+        flex-direction: column;
+        gap: 15px;
     }
 
-    .titre {
+    .detail-logo {
         font-size: 1.5em;
+        margin-top: 10px;
+    }
+    
+    .product-details-container {
+        padding: 20px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-nav {
+        flex-direction: column;
+    }
+    .nav-button {
+        width: 90%;
+        max-width: 300px;
+    }
+    .catalogue {
+        gap: 20px;
+        padding: 10px 5%;
     }
 }
